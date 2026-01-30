@@ -1,0 +1,3 @@
+repository "mask@tj_5bd72285_b108_483e_ac91_93801d65746e@cloud.cn"
+  path "/"
+    smartbranch "/main/zizhuang"
