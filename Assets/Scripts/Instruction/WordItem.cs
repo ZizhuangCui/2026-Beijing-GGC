@@ -4,6 +4,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
+using InstructionSystem;
+
 public class WordItem : MonoBehaviour
 {
     public WordData wordData;

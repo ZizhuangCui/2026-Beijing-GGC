@@ -5,6 +5,7 @@ using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using InstructionSystem;
 
 public class WordManager : Singleton<WordManager>
 {

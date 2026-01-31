@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using InstructionSystem;
 
 public class FontManager : Singleton<FontManager>
 {
-    public List<FontData> fontData;
-    [HideInInspector]public List<FontData> selectFont;
+    public List<LexiconFontData> fontData;
+    [HideInInspector]public List<LexiconFontData> selectFont;
     public GameObject fontPrefab;
     public TextMeshProUGUI instruction;
     [HideInInspector] public string instructionText;
     // Start is called before the first frame update
     void Awake()
     {
-        foreach (FontData data in fontData) 
+        foreach (LexiconFontData data in fontData) 
         { 
             GameObject font =  Instantiate(fontPrefab);
             font.GetComponent<FontItem>().fontData = data;

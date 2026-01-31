@@ -3,7 +3,7 @@ using System;
 namespace InstructionSystem
 {
     [Serializable]
-    public class WordData
+    public class LexiconFontData
     {
         public Semantics semantics;
         public string text;
