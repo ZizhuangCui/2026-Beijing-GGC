@@ -1,12 +1,19 @@
 using System;
 
-namespace InstructionSystem
+
+
+public enum Semantics
 {
-    [Serializable]
-    public class WordData
-    {
-        public Semantics semantics;
-        public string text;
-        public string garbledText;
-    }
+    Item,
+    Location,
+    Verb,
+    Adjective,
+    Numeral
+}
+[Serializable]
+public class WordData
+{
+    public Semantics semantics;
+    public string text;
+    public string garbledText;
 }

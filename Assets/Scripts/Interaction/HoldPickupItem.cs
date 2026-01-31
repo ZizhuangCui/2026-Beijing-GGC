@@ -4,7 +4,8 @@
 public class HoldPickupItem : MonoBehaviour
 {
     public Vector2 localOffset = new Vector2(0.3f, 0.1f);
-
+    public string name;
+    public int id;
     private Rigidbody2D rb;
     private Collider2D col;
     private bool isHeld;
