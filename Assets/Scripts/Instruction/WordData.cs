@@ -10,9 +10,9 @@ public enum Semantics
     Adjective
 }
 [Serializable]
-public class FontData
+public class WordData
 {
-    public Semantics Semantics;
+    public Semantics semantics;
     public string text;
     public string garbledText;
 }

@@ -4,15 +4,14 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FontItem : MonoBehaviour
+public class WordItem : MonoBehaviour
 {
-    public FontData fontData;
-    public TextMeshProUGUI font;
+    public WordData wordData;
+    public TextMeshProUGUI word;
     // Start is called before the first frame update
     void Start()
     {
-        font.text = fontData.text;
-        font.fontSize = 25;
+        word.text = wordData.text;
     }
 
     // Update is called once per frame
@@ -22,6 +21,6 @@ public class FontItem : MonoBehaviour
     }
     public void OnPointerDown()
     {
-        FontManager.Instance.AddFont(fontData.text);
+        WordManager.Instance.AddFont(wordData.text);
     }
 }

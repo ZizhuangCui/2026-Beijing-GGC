@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class FontManager : Singleton<FontManager>
+public class WordManager : Singleton<WordManager>
 {
-    public List<FontData> fontData;
+    public List<WordData> wordDatas;
     [HideInInspector]public List<FontData> selectFont;
     public GameObject fontPrefab;
     public TextMeshProUGUI instruction;
@@ -14,15 +16,15 @@ public class FontManager : Singleton<FontManager>
     // Start is called before the first frame update
     void Awake()
     {
-        foreach (FontData data in fontData) 
+        foreach (WordData data in wordDatas) 
         { 
             GameObject font =  Instantiate(fontPrefab);
-            font.GetComponent<FontItem>().fontData = data;
+            font.GetComponent<WordItem>().wordData = data;
             font.transform.parent = transform;  
         }
-    }
 
-    // Update is called once per frame
+    }
+   
     void Update()
     {
         
