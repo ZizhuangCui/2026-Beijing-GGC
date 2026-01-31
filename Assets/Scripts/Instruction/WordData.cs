@@ -5,9 +5,11 @@ using UnityEngine;
 
 public enum Semantics
 {
-    Noun,
+    Item,
+    Location,
     Verb,
-    Adjective
+    Adjective,
+    Numeral
 }
 [Serializable]
 public class WordData

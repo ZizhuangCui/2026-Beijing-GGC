@@ -1,12 +1,8 @@
 using AI;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
-public class TaskManager : MonoBehaviour
+public class TaskTextManager : MonoBehaviour
 {
     class WordBanksCell
     {
@@ -17,13 +13,13 @@ public class TaskManager : MonoBehaviour
     private Dictionary<string, WordBanksCell> globalWordBanks = new Dictionary<string, WordBanksCell>();
     public GameObject taskPrefabs;
     private string overrideUserPrompt =
-            "帮我润色A这句话，要求生成一个简短、可执行的任务";
+            "帮我润色A这句话，要求生成一个简短、可执行的任务，不需要出现的词语";
     void Awake()
     {
       InitializeTaskFormats();
       InitializeWordBanks();
       GeneratedTask();
-      
+      TaskFinishManager.Instance.TashParse(taskDatas);
     }
     
     private WordData SelectRandomWord(string placeholder)
@@ -53,27 +49,27 @@ public class TaskManager : MonoBehaviour
     {
         WordBanksCell cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "网球", "羽毛球", "萝卜" };
-        cell.semantics = Semantics.Noun;
+        cell.semantics = Semantics.Item;
         globalWordBanks.Add("A", cell);
 
         cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "桌子", "红色旗子", "蓝色旗子", "草" };
-        cell.semantics = Semantics.Noun;
+        cell.semantics = Semantics.Location;
         globalWordBanks.Add("B", cell);
 
         cell = new WordBanksCell();
-        cell.wordBanks = new List<string> { "拿", "吃", "扔", "洒","叫"};
+        cell.wordBanks = new List<string> { "拿", "吃",};
         cell.semantics = Semantics.Verb;
         globalWordBanks.Add("C", cell);
 
         cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "奶茶", "可乐", "汉堡", "饭团","萝卜","纸巾" };
-        cell.semantics = Semantics.Noun;
+        cell.semantics = Semantics.Item;
         globalWordBanks.Add("D", cell);
 
         cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "红色旗子", "蓝色旗子", "黄色旗子"};
-        cell.semantics = Semantics.Noun;
+        cell.semantics = Semantics.Location;
         globalWordBanks.Add("E", cell);
 
         cell = new WordBanksCell();
@@ -83,7 +79,7 @@ public class TaskManager : MonoBehaviour
 
         cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "一", "二", "三"};
-        cell.semantics = Semantics.Adjective;
+        cell.semantics = Semantics.Numeral;
         globalWordBanks.Add("G", cell);
     }
     void GeneratedTask()
