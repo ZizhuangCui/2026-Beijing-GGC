@@ -1,6 +1,9 @@
+using AI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class TaskManager : MonoBehaviour
@@ -12,7 +15,9 @@ public class TaskManager : MonoBehaviour
     }
     public List<TaskData> taskDatas= new List<TaskData>();
     private Dictionary<string, WordBanksCell> globalWordBanks = new Dictionary<string, WordBanksCell>();
-    // Start is called before the first frame update
+    public GameObject taskPrefabs;
+    private string overrideUserPrompt =
+            "帮我润色A这句话，要求生成一个简短、可执行的任务";
     void Awake()
     {
       InitializeTaskFormats();
@@ -34,7 +39,15 @@ public class TaskManager : MonoBehaviour
         
         TaskData taskData = new TaskData();
         taskData.formatString = "拿 {A} 扔到 {B}";
-        taskDatas.Add(taskData);                                           
+        taskDatas.Add(taskData);
+
+        taskData = new TaskData();
+        taskData.formatString = "{C} {D}";
+        taskDatas.Add(taskData);
+
+        taskData = new TaskData();
+        taskData.formatString = "到{E}上做出行为{F}{G}次";
+        taskDatas.Add(taskData);
     }
     void InitializeWordBanks()
     {
@@ -42,24 +55,54 @@ public class TaskManager : MonoBehaviour
         cell.wordBanks = new List<string> { "网球", "羽毛球", "萝卜" };
         cell.semantics = Semantics.Noun;
         globalWordBanks.Add("A", cell);
+
         cell = new WordBanksCell();
         cell.wordBanks = new List<string> { "桌子", "红色旗子", "蓝色旗子", "草" };
         cell.semantics = Semantics.Noun;
         globalWordBanks.Add("B", cell);
+
+        cell = new WordBanksCell();
+        cell.wordBanks = new List<string> { "拿", "吃", "扔", "洒","叫"};
+        cell.semantics = Semantics.Verb;
+        globalWordBanks.Add("C", cell);
+
+        cell = new WordBanksCell();
+        cell.wordBanks = new List<string> { "奶茶", "可乐", "汉堡", "饭团","萝卜","纸巾" };
+        cell.semantics = Semantics.Noun;
+        globalWordBanks.Add("D", cell);
+
+        cell = new WordBanksCell();
+        cell.wordBanks = new List<string> { "红色旗子", "蓝色旗子", "黄色旗子"};
+        cell.semantics = Semantics.Noun;
+        globalWordBanks.Add("E", cell);
+
+        cell = new WordBanksCell();
+        cell.wordBanks = new List<string> { "叫","跳" };
+        cell.semantics = Semantics.Verb;
+        globalWordBanks.Add("F", cell);
+
+        cell = new WordBanksCell();
+        cell.wordBanks = new List<string> { "一", "二", "三"};
+        cell.semantics = Semantics.Adjective;
+        globalWordBanks.Add("G", cell);
     }
     void GeneratedTask()
     {
         for (int i = 0; i < taskDatas.Count; i++)
         {
+            GameObject task = Instantiate(taskPrefabs);
+            task.transform.parent = transform;
+            TaskItem item = task.GetComponent<TaskItem>();
             var taskData = taskDatas[i];
             var placeholders = ExtractPlaceholders(taskData.formatString);
+            Debug.Log(taskData.formatString);
             foreach (var placeholder in placeholders)
             {
                 WordData selectedWord = SelectRandomWord(placeholder);
 
                 if (!string.IsNullOrEmpty(selectedWord.text))
                 {
-                    // 替换占位符
+
                     taskData.formatString = taskData.formatString.Replace("{" + placeholder + "}", selectedWord.text);
                     taskData.selectsWords.Add(selectedWord);
                 }
@@ -68,13 +111,17 @@ public class TaskManager : MonoBehaviour
                     Debug.LogWarning($"未找到位置 {placeholder} 的可用词库");
                 }
             }
-            Debug.Log(taskData.formatString);
+            item.taskData = taskData;
+            string  prompt = overrideUserPrompt.Replace("A", "\"" + taskData.formatString + "\"");
+            Debug.Log(prompt);
+
+            KimiTaskClient.
+                     Instance.GenerateTask(
+                     prompt,
+                     onSuccess: (t) => item.taskText.text = t,
+                     onError: (e) => item.taskText.text = "Fail：\n" + e
+                 );
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     private List<string> ExtractPlaceholders(string format)
     {

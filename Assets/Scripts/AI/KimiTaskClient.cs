@@ -12,7 +12,7 @@ namespace AI
     /// - https://api.moonshot.cn/v1  (CN)
     /// - https://api.moonshot.ai/v1  (Global)  // use the one your console recommends
     /// </summary>
-    public class KimiTaskClient : MonoBehaviour
+    public class KimiTaskClient : Singleton<KimiTaskClient>
     {
         private const string API_KEY = "sk-dhF45QTl9C784oNjMHv4bN0EAmW74mou5mTcVtNDqY0P6MKZ";
         private const string BASE_URL = "https://api.moonshot.cn/v1";
